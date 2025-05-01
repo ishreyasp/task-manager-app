@@ -1,4 +1,5 @@
 import { Task } from '../interfaces/task';
+import TASK_STATUSES from '../constants/stringConstants';
 
 /**
  * Task model handling operations related to task management
@@ -17,15 +18,15 @@ export class TaskModel implements Task {
     this.createdAt = new Date();
   }
 
-  isCompleted(): boolean {
-    return this.status === 'Completed';
+  isDone(): boolean {
+    return this.status === TASK_STATUSES.DONE;
   }
 
-  isPending(): boolean {
-    return this.status === 'Pending';
+  isToDo(): boolean {
+    return this.status === TASK_STATUSES.TO_DO;
   }
 
-  isOngoing(): boolean {
-    return this.status === 'Ongoing';
+  isInProgress(): boolean {
+    return this.status === TASK_STATUSES.IN_PROGRESS;
   }
 }

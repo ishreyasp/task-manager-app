@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import e, { Request, Response } from 'express';
 import { TaskModel } from '../models/task';
 import { Task } from '../interfaces/task';
 import tasks from '../database/tasks';
@@ -21,6 +21,23 @@ export default class TaskService {
             logger.info('Fetching all tasks from database');
             const allTasks = await tasks.findAll();
             return allTasks;
+        } catch (error) {
+            logger.error('Failed to retrieve tasks. Please try again later. Error: ', error);
+            throw new DatabaseError("Failed to retrieve tasks. Please try again later.");
+        }
+    }
+
+    public static async getTaskById(id: number) {
+        try {
+            logger.info(`Fetching task for Id: ${id}`);
+            const existingTask = await tasks.findByPk(id);
+
+            if (!existingTask) {
+                logger.error(`Task with ID: ${id} not found`);
+                throw new NotFoundError(`Task with id ${id} not found`);
+            }
+
+            return existingTask;
         } catch (error) {
             logger.error('Failed to retrieve tasks. Please try again later. Error: ', error);
             throw new DatabaseError("Failed to retrieve tasks. Please try again later.");
