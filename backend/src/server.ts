@@ -1,5 +1,6 @@
 import app from './app';
 import dotenv from 'dotenv';
+import logger from './utils/logger';
 
 // Load environment variables
 dotenv.config();
@@ -14,11 +15,11 @@ const startSrv = async () => {
     try {
         // Start the server
         app.listen(PORT, () => {    
-            console.log(`Server is running on port ${PORT}`);
+            logger.info(`Server is running on port ${PORT}`);
         });
         
     } catch (error) {
-        console.error('Error starting server:', error);
+        logger.error('Error starting server:', error);
         process.exit(1); 
     }
 }

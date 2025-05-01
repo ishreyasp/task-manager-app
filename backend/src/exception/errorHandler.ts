@@ -1,4 +1,5 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
+import logger from '../utils/logger';
 
 /**
  * Custom error class for database related errors
@@ -34,19 +35,21 @@ export class NotFoundError extends Error {
 }
 
 /**
- * Global error handling
+ * Global error handling middleware for Express
  * Processes errors and returns appropriate HTTP responses based on error type
  * 
  * @param err - The error object thrown in the application
- * @param req - Request object
- * @param res - Response object
+ * @param req - Express request object
+ * @param res - Express response object
+ * @param next - Express next function (required for error middleware)
  */
 export const errorHandler = (
     err: Error,
     req: Request,
-    res: Response
+    res: Response,
+    next: NextFunction  // This parameter is required for Express to recognize it as an error handler
 ): void => {
-    // logger.error(`Error: ${err.message}`, { stack: err.stack });
+    logger.error(`Error: ${err.message}`, { stack: err.stack });
 
     if (err instanceof DatabaseError) {
         res.status(503).json({
@@ -60,7 +63,7 @@ export const errorHandler = (
         });
     } else if (err instanceof NotFoundError) {
         res.status(404).json({
-            error: 'Not Found',
+            error: 'Resource Not Found Error',
             message: err.message
         });
     } else {

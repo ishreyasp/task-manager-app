@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
+import logger from '../utils/logger';
 
 // Load environment variables
 dotenv.config();
@@ -24,12 +25,12 @@ const sequelize = new Sequelize({
 (async () => {
     try {
         await sequelize.authenticate();
-        console.log('Connection to the database has been established successfully.');
+        logger.info('Connection to the database has been established successfully.');
 
         await sequelize.sync({ force: false });
-        console.log('Database synchronized successfully.');
+        logger.info('Database synchronized successfully.');
     } catch (error) {
-        console.error('Unable to connect to the database:', error);
+        logger.error('Unable to connect to the database:', error);
         process.exit(1);
     }
 })();

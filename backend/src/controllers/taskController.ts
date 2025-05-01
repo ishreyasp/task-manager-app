@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import TaskService from '../service/taskService';
 import { Task } from '../interfaces/task';
 import { ValidationError } from '../exception/errorHandler';
+import logger from '../utils/logger';
 
 /**
  * Controller for handling task related HTTP requests
@@ -16,7 +17,9 @@ export default class TaskController {
      * @return List of all tasks in JSON format
      */
     public static async getAllTasks(req: Request, res: Response): Promise<void> {
+        logger.info('Fetching all tasks...');
         const allTasks = await TaskService.getAllTasks();
+        logger.info(`All tasks fetched successfully. Found ${allTasks.length} tasks.`);
         res.status(200).json(allTasks);
     }
 
@@ -30,6 +33,12 @@ export default class TaskController {
      * @throws ValidationError if status is invalid
      */
     public static async createTask(req: Request, res: Response): Promise<void> {
+        logger.info('Creating a new task...');
+        
+        if (!req.body || Object.keys(req.body).length === 0) {
+            logger.error('Task data is required');
+            throw new ValidationError('Task data is required');
+        }
         const taskData: Task = {
             title: req.body.title,
             description: req.body.description,
@@ -37,10 +46,12 @@ export default class TaskController {
         };
 
         if (!taskData.title || !taskData.description) {
+            logger.error('Title and description are required');
             throw new ValidationError('Title and description are required');
         }
 
         if (taskData.status && !['Pending'].includes(taskData.status)) {
+            logger.error('Invalid status value');
             throw new ValidationError('Invalid status value');
         }
 
@@ -58,6 +69,7 @@ export default class TaskController {
      * @throws ValidationError if status is invalid
      */
     public static async updateTask(req: Request, res: Response): Promise<void> {
+        logger.info('Updating task...');
         const taskId = parseInt(req.params.id, 10);
 
         const taskData: Task = {
@@ -67,18 +79,22 @@ export default class TaskController {
         };
 
         if (isNaN(taskId)) {
+            logger.error('Invalid task ID');
             throw new ValidationError('Invalid task ID');
         }
 
         if (taskId===null) {
+            logger.error('Task ID is required');
             throw new ValidationError('Task ID is required');
         }
 
         if (!taskData.title || !taskData.description) {
+            logger.error('Title and description are required');
             throw new ValidationError('Title and description are required');
         }
 
         if (taskData.status && !['Pending', 'Completed', 'Ongoing'].includes(taskData.status)) {
+            logger.error('Invalid status value');
             throw new ValidationError('Invalid status value');
         }
 
@@ -95,17 +111,20 @@ export default class TaskController {
      * @throws ValidationError if task ID is null
      */
     public static async deleteTask(req: Request, res: Response): Promise<void> {
-            const taskId = parseInt(req.params.id, 10);
+        logger.info('Deleting task...');
+        const taskId = parseInt(req.params.id, 10);
 
-            if (isNaN(taskId)) {
-                throw new ValidationError('Invalid task ID');
-            }
+        if (isNaN(taskId)) {
+            logger.error('Invalid task ID');
+            throw new ValidationError('Invalid task ID');
+        }
 
-            if (taskId===null) {
-                throw new ValidationError('Task ID is required');
-            }
+        if (taskId===null) {
+            logger.error('Task ID is required');
+            throw new ValidationError('Task ID is required');
+        }
 
-            await TaskService.deleteTask(taskId);
-            res.status(204).send();
-    }
+        await TaskService.deleteTask(taskId);
+        res.status(204).send();
+}
 }
