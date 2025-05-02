@@ -1,4 +1,4 @@
-# Task Manager App Backend
+# Task Manager App (Backend)
 
 Backend for the Task Manager application built with Node.js, Express, and PostgreSQL.
 
@@ -8,6 +8,7 @@ Backend for the Task Manager application built with Node.js, Express, and Postgr
 - Express.js
 - TypeScript
 - PostgreSQL
+- Sequalize
 - pg (PostgreSQL client)
 - dotenv (Environment variable management)
 - cors (Cross-Origin Resource Sharing)
@@ -15,35 +16,40 @@ Backend for the Task Manager application built with Node.js, Express, and Postgr
 ## Setup and Installation
 
 1. Make sure you have Node.js and PostgreSQL installed on your system.
+   ```bash
+   node --version
+   npm --version
+   psql --version
+   ```
 
-2. Create a PostgreSQL database named `taskmanager` (or update the connection settings in the code).
+2. Create a PostgreSQL database named `task-manager-db` (or update the connection settings in the code).
 
-3. Install dependencies:
+4. Install dependencies:
    ```bash
    npm install
    ```
 
-4. Create a `.env` file in the root directory with the following content (adjust as needed):
+5. Create a `.env` file in the directory with the following content (adjust as needed):
    ```
-   PORT=5000
-   DB_USER=postgres
-   DB_PASSWORD=postgres
+   PORT=4000
+   DB_USER=<username>
+   DB_PASSWORD=<password>
    DB_HOST=localhost
    DB_PORT=5432
-   DB_NAME=taskmanager
+   DB_NAME=task-manager-db
    ```
 
-5. Build the TypeScript code:
+6. Build the backend code:
    ```bash
    npm run build
    ```
 
-6. Start the server:
+7. Start the server:
    ```bash
    npm start
    ```
 
-7. For development with live reload:
+8. For starting server with live reload:
    ```bash
    npm run dev
    ```
@@ -57,12 +63,12 @@ http://localhost:4000
 
 ### Endpoints
 
-| Method | Endpoint     | Description               | Request Body               | Response                   |
-|--------|--------------|---------------------------|----------------------------|----------------------------|
-| GET    | /tasks       | Get all tasks             | -                          | Array of task objects      |
-| POST   | /tasks       | Create a new task         | { title, description, status } | Created task object        |
-| PUT    | /tasks/:id   | Update an existing task   | { title?, description?, status? } | Updated task object        |
-| DELETE | /tasks/:id   | Delete a task             | -                          | - |
+| Method | Endpoint     | Description               | Request Body               | Response                   |Status Code | 
+|--------|--------------|---------------------------|----------------------------|----------------------------|-------------
+| GET    | /tasks       | Get all tasks             | -                          | Array of task objects      | 200
+| POST   | /tasks       | Create a new task         | { title, description, status } | Created task object        | 201
+| PUT    | /tasks/:id   | Update an existing task   | { title, description, status } | Updated task object        | 200
+| DELETE | /tasks/:id   | Delete a task             | -                          | - | 204
 
 ### Task Object Structure
 
@@ -71,7 +77,7 @@ http://localhost:4000
   "id": 1,
   "title": "Example Task",
   "description": "This is an example task description",
-  "status": "Pending",
+  "status": "Done",
   "created_at": "2023-04-01T12:00:00.000Z"
 }
 ```
