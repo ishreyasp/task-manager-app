@@ -56,4 +56,12 @@ Task Manager Application built to manage and track day to day tasks with ease.
 
 ## API Documentation   
 Visit https://github.com/ishreyasp/task-manager-app/tree/main/backend#api-documentation for more information
+
+## Regression Testing
+Import `task-manager-app-regression.postman_collection` from regression directory into postion and run it for regression testing
+
 ## Screenshots of App
+Visit https://github.com/ishreyasp/task-manager-app/tree/main/screenshots to see results for:
+- Backend Restful APIs
+- UI/UX
+- Regression Tests
