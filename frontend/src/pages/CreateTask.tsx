@@ -37,6 +37,9 @@ const CreateTaskPage: React.FC = () => {
     navigate('/');
   };
 
+  /**
+   * Render the CreateTaskPage component
+   */
   return (
     <div className="container-custom">
       <div className="max-w-2xl mx-auto">

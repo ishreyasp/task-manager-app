@@ -87,6 +87,9 @@ const EditTaskPage: React.FC = () => {
     navigate('/');
   };
 
+  /**
+   * Render the EditTaskPage component 
+   */
   return (
     <div className="container-custom">
       <div className="max-w-2xl mx-auto">
