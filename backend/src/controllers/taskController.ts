@@ -106,8 +106,8 @@ export default class TaskController {
         };
 
         if (isNaN(taskId)) {
-            logger.error('Invalid task ID');
-            throw new ValidationError('Invalid task ID');
+            logger.error('Invalid task ID. Task Id can only be an integer');
+            throw new ValidationError('Invalid task ID. Task Id can only be an integer');
         }
 
         if (taskId===null) {
@@ -121,8 +121,8 @@ export default class TaskController {
         }
 
         if (taskData.status && ![TASK_STATUSES.TO_DO, TASK_STATUSES.DONE, TASK_STATUSES.IN_PROGRESS].includes(taskData.status)) {
-            logger.error('Invalid status value. Status while creating task can be either TO_DO, IN_PROGRESS or DONE');
-            throw new ValidationError('Invalid status value. Status while creating task can be either TO_DO, IN_PROGRESS or DONE');
+            logger.error('Invalid status value. Status while updating task can be either TO_DO, IN_PROGRESS or DONE');
+            throw new ValidationError('Invalid status value. Status while updating task can be either TO_DO, IN_PROGRESS or DONE');
         }
 
         const updatedTask = await TaskService.updateTask(taskId, taskData);
@@ -143,8 +143,8 @@ export default class TaskController {
         const taskId = parseInt(req.params.id, 10);
 
         if (isNaN(taskId)) {
-            logger.error('Invalid task ID');
-            throw new ValidationError('Invalid task ID');
+            logger.error('Invalid task ID. Task Id can only be an integer');
+            throw new ValidationError('Invalid task ID. Task Id can only be an integer');
         }
 
         if (taskId===null) {
