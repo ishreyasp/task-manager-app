@@ -3,6 +3,7 @@ import TaskService from '../service/taskService';
 import { Task } from '../interfaces/task';
 import { ValidationError } from '../exception/errorHandler';
 import logger from '../utils/logger';
+import TASK_STATUSES from '../constants/stringConstants';
 
 /**
  * Controller for handling task related HTTP requests
@@ -21,6 +22,31 @@ export default class TaskController {
         const allTasks = await TaskService.getAllTasks();
         logger.info(`All tasks fetched successfully. Found ${allTasks.length} tasks.`);
         res.status(200).json(allTasks);
+    }
+
+    /**
+     * Get task by given task Id
+     * 
+     * @param req - Request object
+     * @param res - Response object
+     * @return List of all tasks in JSON format
+     */
+    public static async getTaskById(req: Request, res: Response): Promise<void> {
+        logger.info('Fetching a task...');
+        const taskId = parseInt(req.params.id, 10);
+
+        if (isNaN(taskId)) {
+            logger.error('Invalid task ID');
+            throw new ValidationError('Invalid task ID');
+        }
+
+        if (taskId===null) {
+            logger.error('Task ID is required');
+            throw new ValidationError('Task ID is required');
+        }
+
+        const existingTask = await TaskService.getTaskById(taskId);
+        res.status(200).json(existingTask);
     }
 
      /**
@@ -50,7 +76,7 @@ export default class TaskController {
             throw new ValidationError('Title and description are required');
         }
 
-        if (taskData.status && !['Pending'].includes(taskData.status)) {
+        if (taskData.status && ![TASK_STATUSES.TO_DO].includes(taskData.status)) {
             logger.error('Invalid status value');
             throw new ValidationError('Invalid status value');
         }
@@ -60,7 +86,8 @@ export default class TaskController {
     }
 
     /**
-     * Update an existing task
+     * Update an existing task for given task Id
+     * 
      * @param req - Request object with task ID in params and updated data in body
      * @param res - Response object
      * @return Updated task in JSON format
@@ -93,7 +120,7 @@ export default class TaskController {
             throw new ValidationError('Title and description are required');
         }
 
-        if (taskData.status && !['Pending', 'Completed', 'Ongoing'].includes(taskData.status)) {
+        if (taskData.status && ![TASK_STATUSES.TO_DO, TASK_STATUSES.DONE, TASK_STATUSES.IN_PROGRESS].includes(taskData.status)) {
             logger.error('Invalid status value');
             throw new ValidationError('Invalid status value');
         }
@@ -103,7 +130,8 @@ export default class TaskController {
     }
 
     /**
-     * Delete a task by ID
+     * Delete a task by given task Id
+     * 
      * @param req - Request object with task ID in params
      * @param res - Response object
      * @return No content response

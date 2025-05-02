@@ -6,6 +6,9 @@ const router = Router();
 // Get all tasks
 router.get('/', TaskController.getAllTasks);
 
+// Get tasks by task Id
+router.get('/:id', TaskController.getTaskById);
+
 // Create a new task
 router.post('/', TaskController.createTask);
 
