@@ -55,5 +55,5 @@ Task Manager Application built to manage and track day to day tasks with ease.
    ```   
 
 ## API Documentation   
-Visit https://github.com/ishreyasp/task-manager-app/tree/main/backend#readme for more information
+Visit https://github.com/ishreyasp/task-manager-app/tree/main/backend#api-documentation for more information
 ## Screenshots of App
