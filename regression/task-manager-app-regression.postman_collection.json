@@ -31,7 +31,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"title\": \"A task\",\r\n    \"description\": \"Description of task\",\r\n    \"status\": \"Pending\"\r\n}",
+					"raw": "{\r\n    \"title\": \"A task\",\r\n    \"description\": \"Description of task\",\r\n    \"status\": \"To Do\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -124,7 +124,7 @@
 							"\r",
 							"pm.test(\"Verify data in response\", function() {\r",
 							"    pm.expect(responseData.error).to.equal(\"Validation Error\");\r",
-							"    pm.expect(responseData.message).to.equal(\"Invalid status value\");\r",
+							"    pm.expect(responseData.message).to.equal(\"Invalid status value. Status while creating task can be either TO_DO or IN_PROGRESS\");\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -159,7 +159,7 @@
 			"response": []
 		},
 		{
-			"name": "Create Task (Error - Null Task Title and Description)",
+			"name": "Create Task (Error - Null Task Title)",
 			"event": [
 				{
 					"listen": "test",
@@ -177,7 +177,7 @@
 							"\r",
 							"pm.test(\"Verify data in response\", function() {\r",
 							"    pm.expect(responseData.error).to.equal(\"Validation Error\");\r",
-							"    pm.expect(responseData.message).to.equal(\"Title and description are required\");\r",
+							"    pm.expect(responseData.message).to.equal(\"Task title is required\");\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -282,7 +282,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"title\": \"This task got updated\",\r\n    \"description\": \"Description of task\",\r\n    \"status\": \"Completed\"\r\n}",
+					"raw": "{\r\n    \"title\": \"This task got updated\",\r\n    \"description\": \"Description of task\",\r\n    \"status\": \"Done\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -377,7 +377,7 @@
 							"\r",
 							"pm.test(\"Verify data in response\", function() {\r",
 							"    pm.expect(responseData.error).to.equal(\"Validation Error\");\r",
-							"    pm.expect(responseData.message).to.equal(\"Invalid status value\");\r",
+							"    pm.expect(responseData.message).to.equal(\"Invalid status value. Status while creating task can be either TO_DO, IN_PROGRESS or DONE\");\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -413,7 +413,7 @@
 			"response": []
 		},
 		{
-			"name": "Update Task (Error - Null Task Title and Description)",
+			"name": "Update Task (Error - Null Task Title)",
 			"event": [
 				{
 					"listen": "test",
@@ -431,7 +431,7 @@
 							"\r",
 							"pm.test(\"Verify data in response\", function() {\r",
 							"    pm.expect(responseData.error).to.equal(\"Validation Error\");\r",
-							"    pm.expect(responseData.message).to.equal(\"Title and description are required\");\r",
+							"    pm.expect(responseData.message).to.equal(\"Task title is required\");\r",
 							"});"
 						],
 						"type": "text/javascript",
@@ -498,7 +498,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"title\": \"This task got updated\",\r\n    \"description\": \"Description of task\",\r\n    \"status\": \"Completed\"\r\n}",
+					"raw": "{\r\n    \"title\": \"This task got updated\",\r\n    \"description\": \"Description of task\",\r\n    \"status\": \"Done\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
