@@ -71,14 +71,14 @@ export default class TaskController {
             status: req.body.status
         };
 
-        if (!taskData.title || !taskData.description) {
-            logger.error('Title and description are required');
-            throw new ValidationError('Title and description are required');
+        if (!taskData.title) {
+            logger.error('Task title is required');
+            throw new ValidationError('Task title is required');
         }
 
-        if (taskData.status && ![TASK_STATUSES.TO_DO].includes(taskData.status)) {
-            logger.error('Invalid status value');
-            throw new ValidationError('Invalid status value');
+        if (taskData.status && ![TASK_STATUSES.TO_DO, TASK_STATUSES.IN_PROGRESS].includes(taskData.status)) {
+            logger.error('Invalid status value. Status while creating task can be either TO_DO or IN_PROGRESS');
+            throw new ValidationError('Invalid status value. Status while creating task can be either TO_DO or IN_PROGRESS');
         }
 
         const newTask = await TaskService.createTask(taskData);
@@ -115,14 +115,14 @@ export default class TaskController {
             throw new ValidationError('Task ID is required');
         }
 
-        if (!taskData.title || !taskData.description) {
-            logger.error('Title and description are required');
-            throw new ValidationError('Title and description are required');
+        if (!taskData.title) {
+            logger.error('Task title is required');
+            throw new ValidationError('Task title is required');
         }
 
         if (taskData.status && ![TASK_STATUSES.TO_DO, TASK_STATUSES.DONE, TASK_STATUSES.IN_PROGRESS].includes(taskData.status)) {
-            logger.error('Invalid status value');
-            throw new ValidationError('Invalid status value');
+            logger.error('Invalid status value. Status while creating task can be either TO_DO, IN_PROGRESS or DONE');
+            throw new ValidationError('Invalid status value. Status while creating task can be either TO_DO, IN_PROGRESS or DONE');
         }
 
         const updatedTask = await TaskService.updateTask(taskId, taskData);

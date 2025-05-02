@@ -17,7 +17,7 @@ const tasks = sequelize.define("tasks", {
     },
     description: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
     status: {
         type: DataTypes.ENUM(TASK_STATUSES.TO_DO, TASK_STATUSES.IN_PROGRESS, TASK_STATUSES.DONE),
