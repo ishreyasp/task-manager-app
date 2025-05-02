@@ -1,17 +1,160 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* Base styles */
+@layer base {
+  html {
+    @apply antialiased text-neutral-800;
+  }
+  
+  body {
+    @apply bg-gradient-to-br from-neutral-50 to-neutral-100 min-h-screen font-sans;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* Custom component styles */
+@layer components {
+  .btn {
+    @apply px-4 py-2.5 rounded-xl font-medium transition-all duration-200 shadow-button hover:shadow-button-hover transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-opacity-50;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-br from-primary-500 to-primary-600 text-white hover:from-primary-600 hover:to-primary-700 focus:ring-primary-300;
+  }
+  
+  .btn-secondary {
+    @apply bg-gradient-to-br from-secondary-100 to-secondary-200 text-secondary-700 hover:from-secondary-200 hover:to-secondary-300 focus:ring-secondary-200;
+  }
+  
+  .btn-danger {
+    @apply bg-gradient-to-br from-danger-500 to-danger-600 text-white hover:from-danger-600 hover:to-danger-700 focus:ring-danger-300;
+  }
+  
+  .btn-icon {
+    @apply inline-flex items-center justify-center;
+  }
+  
+  .form-input {
+    @apply w-full px-4 py-3 border border-neutral-200 rounded-xl bg-white shadow-input focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-transparent transition-all duration-200;
+  }
+  
+  .form-label {
+    @apply block text-sm font-medium text-neutral-700 mb-1.5 ml-1;
+  }
+  
+  .form-select {
+    @apply w-full px-4 py-3 border border-neutral-200 rounded-xl bg-white shadow-input focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-transparent appearance-none transition-all duration-200;
+  }
+  
+  .card {
+    @apply bg-white rounded-2xl shadow-card p-6 h-full border border-neutral-100 transition-all duration-300 hover:shadow-lg;
+  }
+  
+  .task-card {
+    @apply card flex flex-col h-full hover:border-primary-100;
+  }
+  
+  .status-badge {
+    @apply text-xs font-semibold px-3 py-1 rounded-full;
+  }
+  
+  .status-todo {
+    @apply bg-primary-100 text-primary-700;
+  }
+  
+  .status-in-progress {
+    @apply bg-warning-100 text-warning-700;
+  }
+  
+  .status-review {
+    @apply bg-secondary-100 text-secondary-700;
+  }
+  
+  .status-done {
+    @apply bg-success-100 text-success-700;
+  }
+  
+  .container-custom {
+    @apply max-w-6xl mx-auto px-4 sm:px-6 py-6;
+  }
+  
+  .section-title {
+    @apply text-2xl font-bold text-neutral-800 mb-5;
+  }
+  
+  .app-header {
+    @apply bg-gradient-to-r from-primary-600 to-primary-700 text-white py-5 shadow-md;
+  }
+  
+  .app-footer {
+    @apply bg-gradient-to-r from-neutral-800 to-neutral-900 text-neutral-400 py-6 mt-auto;
+  }
+  
+  .add-task-container {
+    @apply bg-white rounded-2xl shadow-card p-6 mb-10 border border-neutral-100;
+  }
+  
+  .task-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+  }
+  
+  .modal-backdrop {
+    @apply fixed inset-0 z-50 overflow-y-auto bg-neutral-900 bg-opacity-60 backdrop-blur-sm flex items-center justify-center p-4;
+  }
+  
+  .modal-content {
+    @apply bg-white rounded-2xl shadow-xl max-w-lg w-full mx-auto p-6 transform transition-all scale-100;
+  }
+}
+
+/* Animation for modal */
+.modal-enter {
+  @apply opacity-0 scale-95;
+}
+
+.modal-enter-active {
+  @apply opacity-100 scale-100 transition-all duration-300 ease-out;
+}
+
+.modal-exit {
+  @apply opacity-100 scale-100;
+}
+
+.modal-exit-active {
+  @apply opacity-0 scale-95 transition-all duration-200 ease-in;
+}
+
+/* Custom animations */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-neutral-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-primary-200 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-primary-300;
 }
