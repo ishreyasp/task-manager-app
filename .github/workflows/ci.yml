@@ -1,0 +1,51 @@
+# Workflow for Integration tests
+name: Integration Tests
+
+# Trigger the workflow on pull requests to the main branch
+on:
+  pull_request:
+    branches:
+      - main 
+    types: [opened, synchronize, reopened]
+
+jobs:
+  lint:
+    name: Run Linters
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run ESLint for Frontend and Backend
+        run: npm run lint
+  
+  jest:
+    needs: lint
+    name: Run Jest Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Jest Tests for Frontend and Backend
+        run: npm test -- --ci --passWithNoTests --reporters=default --reporters=jest-junit --testTimeout=30000 --collectCoverage=true --coverageReporters=text-summary,html,lcov --coverageDirectory=coverage/jest --testPathIgnorePatterns=/node_modules/ --forceExit=true --detectOpenHandles=true --maxWorkers=2 --runInBand --testTimeout=10000 --testEnvironment=node --setupFilesAfterEnv=./jest.setup.js      

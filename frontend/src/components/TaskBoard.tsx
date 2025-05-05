@@ -32,7 +32,6 @@ const TaskBoard: React.FC = () => {
     } catch (err) {
       const serviceError = err as ServiceError;
       setError(serviceError.message);
-      console.error('Failed to fetch tasks:', serviceError);
     } finally {
       setLoading(false);
     }
@@ -49,7 +48,6 @@ const TaskBoard: React.FC = () => {
     } catch (err) {
       const serviceError = err as ServiceError;
       setError(serviceError.message);
-      console.error(`Failed to update task status:`, serviceError);
     }
   };
 
