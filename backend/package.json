@@ -6,7 +6,9 @@
   "scripts": {
     "start": "node ./dist/server.js",
     "build": "tsc --build",
-    "dev": "nodemon --exec ts-node src/server.ts"
+    "dev": "nodemon --exec ts-node src/server.ts",
+    "lint": "eslint src --ext .js,.ts",
+    "lint:fix": "eslint src --ext .js,.ts --fix"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +19,9 @@
     "@types/express": "^5.0.1",
     "@types/node": "^22.15.3",
     "@types/pg": "^8.11.14",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^8.57.1",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
