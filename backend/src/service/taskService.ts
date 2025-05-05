@@ -1,4 +1,3 @@
-import e, { Request, Response } from 'express';
 import { TaskModel } from '../models/task';
 import { Task } from '../interfaces/task';
 import tasks from '../database/tasks';

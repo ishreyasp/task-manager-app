@@ -1,4 +1,4 @@
-import { Sequelize, DataTypes } from "sequelize";
+import { DataTypes } from "sequelize";
 import sequelize from "../database/dbConfig";
 import TASK_STATUSES from "../constants/stringConstants";
 
