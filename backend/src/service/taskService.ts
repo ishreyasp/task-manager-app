@@ -97,7 +97,7 @@ export default class TaskService {
                 throw new NotFoundError(`Task with id ${taskModel.id} not found`);
             }
 
-            const updatedTask = await tasks.update(
+            await tasks.update(
                 {
                     title: taskModel.title,
                     description: taskModel.description,
