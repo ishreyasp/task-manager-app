@@ -50,4 +50,4 @@ jobs:
       - name: Run Jest Tests for Backend
         run: |
           cd backend
-          npm test:coverage      
+          npm run test:coverage      
