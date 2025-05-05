@@ -10,10 +10,17 @@
     "dev:client": "cd frontend && npm run start",
     "dev:server": "cd backend && npm run dev",
     "dev": "concurrently \"cd frontend && npm run start\" \"cd backend && npm run dev\"",
-    "build": "npm run build --workspaces"
+    "build": "npm run build --workspaces",
+    "lint": "npm run lint:frontend && npm run lint:backend",
+    "lint:fix": "npm run lint:frontend:fix && npm run lint:backend:fix",
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:frontend:fix": "cd frontend && npm run lint:fix",
+    "lint:backend": "cd backend && npm run lint",
+    "lint:backend:fix": "cd backend && npm run lint:fix"
   },
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "eslint": "^8.57.1"
   },
   "dependencies": {
     "task-manager-app": "file:"
