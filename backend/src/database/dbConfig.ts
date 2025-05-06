@@ -22,17 +22,18 @@ const sequelize = new Sequelize({
  * 1. Test the database connection
  * 2. Synchronize the database schema with defined models
  */
-(async () => {
+export const initDatabase = async () => {
     try {
         await sequelize.authenticate();
         logger.info('Connection to the database has been established successfully.');
 
         await sequelize.sync({ force: false });
         logger.info('Database synchronized successfully.');
+        return true;
     } catch (error) {
         logger.error('Unable to connect to the database:', error);
-        process.exit(1);
+        throw error;
     }
-})();
+};
 
 export default sequelize;
