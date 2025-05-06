@@ -1,3 +1,5 @@
+[![Integration Tests](https://github.com/ishreyasp/task-manager-app/workflows/ci/badge.svg)](https://github.com/ishreyasp/task-manager-app/actions/workflows/ci.yml)
+
 # Task Manager App
 
 Task Manager Application built to manage and track day to day tasks with ease.
@@ -49,7 +51,25 @@ Task Manager Application built to manage and track day to day tasks with ease.
    ```bash
    npm run build
    ```
-8. Start backend and frontend server with live reload:
+
+8. To run ESLint for backend and frontend:
+   ```bash
+   npm run lint
+   ```
+
+9. To run test for backend:
+    ```bash
+    cd backend
+    npm run test
+    ```
+
+10. To run test for backend with coverage report:
+    ```bash
+    cd backend
+    npm run test:coverage
+    ```
+             
+11. Start backend and frontend server with live reload:
    ```bash
    npm run dev
    ```   
