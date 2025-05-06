@@ -11,7 +11,7 @@
     "lint:fix": "eslint src --ext .js,.ts --fix",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage --runInBand"
   },
   "keywords": [],
   "author": "",
