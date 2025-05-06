@@ -9,13 +9,14 @@ on:
       - 'backend/**'
 
 jobs:
-    integration-worflow:
-      if: github.event.pull_request.merged == true
-      uses: ishreyasp/task-manager-app/.github/workflows/ci.yml@main    
+    # integration-worflow:
+    #   if: github.event.pull_request.merged == true
+    #   uses: ishreyasp/task-manager-app/.github/workflows/ci.yml@main    
 
     deploy-frontend:
+      if: github.event.pull_request.merged == true
       name: Deploy Frontend to Vercel
-      needs: integration-worflow
+      # needs: integration-worflow
       runs-on: ubuntu-latest
       defaults:
         run:
@@ -59,89 +60,89 @@ jobs:
             VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
             VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }} 
     
-    deploy-backend:
-      name: Deploy Backend to EC2
-      needs: integration-worflow
-      runs-on: ubuntu-latest
-      defaults:
-        run:
-          working-directory: ./backend
+    # deploy-backend:
+    #   name: Deploy Backend to EC2
+    #   needs: integration-worflow
+    #   runs-on: ubuntu-latest
+    #   defaults:
+    #     run:
+    #       working-directory: ./backend
 
-      steps:
-        # Step 1: Fetch the repository code with the latest checkout action
-        - name: Checkout repository
-          uses: actions/checkout@v3
+    #   steps:
+    #     # Step 1: Fetch the repository code with the latest checkout action
+    #     - name: Checkout repository
+    #       uses: actions/checkout@v3
 
-        # Step 2: Set up Node.js environment, specify Node.js version 18 and enable npm chaching  
-        - name: Set up Node.js
-          uses: actions/setup-node@v3
-          with:
-            node-version: '18'
-            cache: 'npm'
-            cache-dependency-path: ./backend/package-lock.json
+    #     # Step 2: Set up Node.js environment, specify Node.js version 18 and enable npm chaching  
+    #     - name: Set up Node.js
+    #       uses: actions/setup-node@v3
+    #       with:
+    #         node-version: '18'
+    #         cache: 'npm'
+    #         cache-dependency-path: ./backend/package-lock.json
 
-        # Step 3: Clean install of dependencies from package-lock.json      
-        - name: Install dependencies
-          run: npm ci
+    #     # Step 3: Clean install of dependencies from package-lock.json      
+    #     - name: Install dependencies
+    #       run: npm ci
 
-        # Step 4: Build the backend application    
-        - name: Build project
-          run: npm run build
+    #     # Step 4: Build the backend application    
+    #     - name: Build project
+    #       run: npm run build
 
-       # Step 5: Set up SSH key for connecting to EC2
-        - name: Install SSH key
-          uses: shimataro/ssh-key-action@v2
-          with:
-            key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
-            known_hosts: ${{ secrets.EC2_KNOWN_HOSTS }}
-            if_key_exists: replace
+    #    # Step 5: Set up SSH key for connecting to EC2
+    #     - name: Install SSH key
+    #       uses: shimataro/ssh-key-action@v2
+    #       with:
+    #         key: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+    #         known_hosts: ${{ secrets.EC2_KNOWN_HOSTS }}
+    #         if_key_exists: replace
 
-        # Step 6: Create a temporary deployment directory (in home directory)
-        - name: Create deployment directory on EC2
-          run: |
-            ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} '
-              mkdir -p ~/deployment/backend
-            '
+    #     # Step 6: Create a temporary deployment directory (in home directory)
+    #     - name: Create deployment directory on EC2
+    #       run: |
+    #         ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} '
+    #           mkdir -p ~/deployment/backend
+    #         '
 
-        # Step 7: Deploy to the temporary directory first
-        - name: Deploy to temporary directory
-          run: |
-            # Copy the built application files
-            rsync -avz --delete ./dist/ ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:~/deployment/backend/dist/
+    #     # Step 7: Deploy to the temporary directory first
+    #     - name: Deploy to temporary directory
+    #       run: |
+    #         # Copy the built application files
+    #         rsync -avz --delete ./dist/ ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:~/deployment/backend/dist/
             
-            # Copy package files for dependencies
-            rsync -avz package*.json ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:~/deployment/backend/
+    #         # Copy package files for dependencies
+    #         rsync -avz package*.json ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }}:~/deployment/backend/
 
-        # Step 8: Move files to production directory with sudo and restart the application
-        - name: Move to production and restart service
-          run: |
-            ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} '
-              # Install dependencies in the temporary directory first
-              cd ~/deployment/backend && npm ci --only=production
+    #     # Step 8: Move files to production directory with sudo and restart the application
+    #     - name: Move to production and restart service
+    #       run: |
+    #         ssh ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} '
+    #           # Install dependencies in the temporary directory first
+    #           cd ~/deployment/backend && npm ci --only=production
               
-              # Copy to production directory with sudo
-              sudo mkdir -p /opt/task-manager-app/backend
-              sudo cp -R ~/deployment/backend/* /opt/task-manager-app/backend/
+    #           # Copy to production directory with sudo
+    #           sudo mkdir -p /opt/task-manager-app/backend
+    #           sudo cp -R ~/deployment/backend/* /opt/task-manager-app/backend/
               
-              # Make sure the .env file exists and has correct permissions
-              sudo cp -n /opt/task-manager-app/backend/.env /opt/task-manager-app/backend/.env.backup 2>/dev/null || true
+    #           # Make sure the .env file exists and has correct permissions
+    #           sudo cp -n /opt/task-manager-app/backend/.env /opt/task-manager-app/backend/.env.backup 2>/dev/null || true
               
-              # Set ownership and permissions
-              sudo chown -R taskmanagerapp:taskmanagerapp /opt/task-manager-app
-              sudo chmod -R 750 /opt/task-manager-app
-              sudo chmod 600 /opt/task-manager-app/backend/.env 2>/dev/null || true
+    #           # Set ownership and permissions
+    #           sudo chown -R taskmanagerapp:taskmanagerapp /opt/task-manager-app
+    #           sudo chmod -R 750 /opt/task-manager-app
+    #           sudo chmod 600 /opt/task-manager-app/backend/.env 2>/dev/null || true
               
-              # Start or restart with PM2 as the appropriate user
-              # Using sudo to run PM2 as the taskmanagerapp user
-              cd /opt/task-manager-app/backend
-              if sudo su -c "pm2 list | grep backend-app" taskmanagerapp; then
-                sudo su -c "pm2 restart backend-app" taskmanagerapp
-              else
-                sudo su -c "pm2 start dist/server.js --name backend-app" taskmanagerapp
-              fi
+    #           # Start or restart with PM2 as the appropriate user
+    #           # Using sudo to run PM2 as the taskmanagerapp user
+    #           cd /opt/task-manager-app/backend
+    #           if sudo su -c "pm2 list | grep backend-app" taskmanagerapp; then
+    #             sudo su -c "pm2 restart backend-app" taskmanagerapp
+    #           else
+    #             sudo su -c "pm2 start dist/server.js --name backend-app" taskmanagerapp
+    #           fi
               
-              # Ensure PM2 saves its config to persist across reboots
-              sudo su -c "pm2 save" taskmanagerapp
+    #           # Ensure PM2 saves its config to persist across reboots
+    #           sudo su -c "pm2 save" taskmanagerapp
               
-              # Clean up deployment directory
-              rm -rf ~/deployment/backend            '
+    #           # Clean up deployment directory
+    #           rm -rf ~/deployment/backend            '

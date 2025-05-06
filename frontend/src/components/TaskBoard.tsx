@@ -28,6 +28,7 @@ const TaskBoard: React.FC = () => {
       setLoading(true);
       setError(null);
       const data = await Service.getTasks();
+      console.log('API Response:', data);
       setTasks(data);
     } catch (err) {
       const serviceError = err as ServiceError;
