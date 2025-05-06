@@ -33,16 +33,17 @@ export default class TaskController {
      */
     public static async getTaskById(req: Request, res: Response): Promise<void> {
         logger.info('Fetching a task...');
+
+        if (req.params.id === null || req.params.id === undefined) {
+            logger.error('Task ID is required');
+            throw new ValidationError('Task ID is required');
+        }
+
         const taskId = parseInt(req.params.id, 10);
 
         if (isNaN(taskId)) {
             logger.error('Invalid task ID');
             throw new ValidationError('Invalid task ID');
-        }
-
-        if (taskId===null) {
-            logger.error('Task ID is required');
-            throw new ValidationError('Task ID is required');
         }
 
         const existingTask = await TaskService.getTaskById(taskId);
@@ -97,6 +98,12 @@ export default class TaskController {
      */
     public static async updateTask(req: Request, res: Response): Promise<void> {
         logger.info('Updating task...');
+
+        if (req.params.id === null || req.params.id === undefined) {
+            logger.error('Task ID is required');
+            throw new ValidationError('Task ID is required');
+        }
+
         const taskId = parseInt(req.params.id, 10);
 
         const taskData: Task = {
@@ -108,11 +115,6 @@ export default class TaskController {
         if (isNaN(taskId)) {
             logger.error('Invalid task ID. Task Id can only be an integer');
             throw new ValidationError('Invalid task ID. Task Id can only be an integer');
-        }
-
-        if (taskId===null) {
-            logger.error('Task ID is required');
-            throw new ValidationError('Task ID is required');
         }
 
         if (!taskData.title) {
@@ -140,16 +142,17 @@ export default class TaskController {
      */
     public static async deleteTask(req: Request, res: Response): Promise<void> {
         logger.info('Deleting task...');
+
+        if (req.params.id === null || req.params.id === undefined) {
+            logger.error('Task ID is required');
+            throw new ValidationError('Task ID is required');
+        }
+
         const taskId = parseInt(req.params.id, 10);
 
         if (isNaN(taskId)) {
             logger.error('Invalid task ID. Task Id can only be an integer');
             throw new ValidationError('Invalid task ID. Task Id can only be an integer');
-        }
-
-        if (taskId===null) {
-            logger.error('Task ID is required');
-            throw new ValidationError('Task ID is required');
         }
 
         await TaskService.deleteTask(taskId);

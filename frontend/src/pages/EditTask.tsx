@@ -31,7 +31,6 @@ const EditTaskPage: React.FC = () => {
       } catch (err) {
         const serviceError = err as ServiceError;
         setError(serviceError.message);
-        console.error('Failed to fetch tasks:', serviceError);
       } finally {
         setLoading(false);
       }
@@ -54,7 +53,6 @@ const EditTaskPage: React.FC = () => {
     } catch (err) {
       const serviceError = err as ServiceError;
       setError(serviceError.message);
-      console.error('Failed to fetch tasks:', serviceError);
     } finally {
       setSubmitting(false);
     }
@@ -73,7 +71,6 @@ const EditTaskPage: React.FC = () => {
     } catch (err) {
       const serviceError = err as ServiceError;
       setError(serviceError.message);
-      console.error('Failed to fetch tasks:', serviceError);
     } finally {
       setSubmitting(false);
       setDeleteConfirmOpen(false);

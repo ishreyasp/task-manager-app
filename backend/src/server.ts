@@ -6,7 +6,7 @@ import logger from './utils/logger';
 dotenv.config();
 
 // Initialize server port
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 4000;
 
 /**
  * Function to start the server

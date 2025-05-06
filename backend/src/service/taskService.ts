@@ -38,6 +38,10 @@ export default class TaskService {
 
             return existingTask;
         } catch (error) {
+            if (error instanceof NotFoundError) {
+                throw error;
+            }
+
             logger.error('Failed to retrieve tasks. Please try again later. Error: ', error);
             throw new DatabaseError("Failed to retrieve tasks. Please try again later.");
         }
@@ -97,7 +101,7 @@ export default class TaskService {
                 throw new NotFoundError(`Task with id ${taskModel.id} not found`);
             }
 
-            const updatedTask = await tasks.update(
+            await tasks.update(
                 {
                     title: taskModel.title,
                     description: taskModel.description,
