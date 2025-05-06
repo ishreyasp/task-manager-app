@@ -1,6 +1,6 @@
 # Workflow for Linting and Testing the Application
 # This workflow is triggered on pull requests to the main branch and runs linting and testing jobs.
-name: Integration Workflow
+name: Integration Pipeline
 
 # Trigger the workflow on pull requests to the main branch
 on:
