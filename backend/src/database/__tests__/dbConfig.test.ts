@@ -76,6 +76,7 @@ describe('Database Configuration', () => {
     let dbConfig: DbConfig | undefined;
     
     jest.isolateModules(() => {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       dbConfig = require('../../database/dbConfig') as DbConfig;
     });
     
@@ -97,6 +98,7 @@ describe('Database Configuration', () => {
     
     let dbConfig: DbConfig | undefined;
     jest.isolateModules(() => {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
       dbConfig = require('../../database/dbConfig') as DbConfig;
     });
     
