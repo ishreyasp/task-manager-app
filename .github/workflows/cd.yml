@@ -1,0 +1,102 @@
+name: Deploy Task Manager App
+
+on:
+  pull_request:
+    branches: [main] 
+    types: [closed]
+
+jobs:
+    integration-worflow:
+      if: github.event.pull_request.merged == true
+      uses: ishreyasp/task-manager-app/.github/workflows/ci.yml@main
+
+    deploy-frontend-preview:
+      name: Deploy Frontend to Vercel
+      needs: integration-worflow
+      runs-on: ubuntu-latest
+
+      steps:
+        # Step 1: Fetch the repository code with the latest checkout action
+        - name: Checkout Repository
+          uses: actions/checkout@v4
+
+        # Step 2: Set up Node.js environment, specify Node.js version 18 and enable npm chaching
+        - name: Set Up Node.js
+          uses: actions/setup-node@v3
+          with:
+              node-version: '18'
+              cache: 'npm'
+
+        # Step 3: Clean install of dependencies from package-lock.json     
+        - name: Install Dependencies
+          run: npm ci
+        
+        # Step 4: Build the frontend application  
+        - name: Build Frontend
+          run: npm run build  
+
+        # Step 5: Install Vercel CLI  
+        - name: Install Vercel CLI
+          run: npm install -g vercel@latest
+
+        # Step 6: Login to Vercel using the token stored in GitHub secrets
+        - name: Pull vercel environment variables
+          run: vercel pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }} 
+
+        # Step 7: Deploy the frontend application to Vercel
+        - name: Deploy to Vercel
+          run: vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }} 
+          env:
+              VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+              VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        
+        # Step 8: Set the VERCEL_URL environment variable to the deployment URL   
+        - name: Comment PR with deployment URL
+          uses: actions/github-script@v6
+          with:
+            github-token: ${{ secrets.GITHUB_TOKEN }}
+            script: |
+              const { VERCEL_URL } = process.env;
+              if (VERCEL_URL) {
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: `Preview deployment is ready! Visit: https://${VERCEL_URL}`
+                });
+              }
+          env:
+            VERCEL_URL: ${{ env.VERCEL_URL }}      
+
+    deploy-production:
+      name: Deploy Production
+      needs: deploy-frontend-preview
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+  
+        - name: Set up Node.js
+          uses: actions/setup-node@v3
+          with:
+            node-version: '18'
+            cache: 'npm'
+  
+        - name: Install dependencies
+          run: npm ci
+  
+        - name: Build project
+          run: npm run build
+  
+        - name: Install Vercel CLI
+          run: npm install --global vercel@latest
+  
+        - name: Pull Vercel environment information
+          run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+  
+        - name: Deploy to Vercel (Production)
+          run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+          env:
+            VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+            VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}      

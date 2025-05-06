@@ -1,5 +1,6 @@
-# Workflow for Integration tests
-name: Integration Tests
+# Workflow for Linting and Testing the Application
+# This workflow is triggered on pull requests to the main branch and runs linting and testing jobs.
+name: Integration Workflow
 
 # Trigger the workflow on pull requests to the main branch
 on:
@@ -7,6 +8,7 @@ on:
     branches:
       - main 
     types: [opened, synchronize, reopened]
+  workflow_call:
 
 jobs:
   # Run linter for frontend and backend code
@@ -34,9 +36,9 @@ jobs:
       # Step 4: Execute the lint script defined in package.json  
       - name: Run ESLint for Frontend and Backend
         run: npm run lint
-  
+        
+  # Run test cases for backend code. This job only runs if the lint job succeeds
   jest:
-    # Run test cases for backend code. This job only runs if the lint job succeeds
     needs: lint
     # Use the latest Ubuntu runner environment
     name: Run Jest Tests
