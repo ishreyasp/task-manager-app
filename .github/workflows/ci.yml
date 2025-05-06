@@ -41,7 +41,7 @@ jobs:
   jest:
     needs: lint
     # Use the latest Ubuntu runner environment
-    name: Run Jest Tests
+    name: Run Jest
     runs-on: ubuntu-latest
 
     steps:
