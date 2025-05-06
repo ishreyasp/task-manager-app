@@ -1,4 +1,4 @@
-[![Integration Tests](https://github.com/ishreyasp/task-manager-app/workflows/ci/badge.svg)](https://github.com/ishreyasp/task-manager-app/actions/workflows/ci.yml)
+[![Integration Tests](https://github.com/ishreyasp/task-manager-app/actions/workflows/ci.yml/badge.svg)](https://github.com/ishreyasp/task-manager-app/actions/workflows/ci.yml)
 
 # Task Manager App
 
