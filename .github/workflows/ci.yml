@@ -9,44 +9,56 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
+  # Run linter for frontend and backend code
   lint:
+    # Use the latest Ubuntu runner environment
     name: Run Linters
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Fetch the repository code with the latest checkout action
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      # Step 2: Set up Node.js environment, specify Node.js version 18 and enable npm chaching
       - name: Set Up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
           cache: 'npm'
 
+      # Step 3: Clean install of dependencies from package-lock.json     
       - name: Install Dependencies
         run: npm ci
 
+      # Step 4: Execute the lint script defined in package.json  
       - name: Run ESLint for Frontend and Backend
         run: npm run lint
   
   jest:
+    # Run test cases for backend code. This job only runs if the lint job succeeds
     needs: lint
+    # Use the latest Ubuntu runner environment
     name: Run Jest Tests
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Fetch the repository code with the latest checkout action
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      # Step 2: Set up Node.js environment, specify Node.js version 18 and enable npm chaching
       - name: Set Up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
           cache: 'npm'
 
+      # Step 3: Clean install of dependencies from package-lock.json     
       - name: Install Dependencies
         run: npm ci
 
+      # Step 4: Run tests with coverage reporting
       - name: Run Jest Tests for Backend
         run: |
           cd backend
