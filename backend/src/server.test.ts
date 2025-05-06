@@ -54,7 +54,7 @@ jest.mock('./app', () => ({
         require('./server');
       });
       
-      expect(app.listen).toHaveBeenCalledWith('4000', expect.any(Function));
+      expect(app.listen).toHaveBeenCalledWith(4000, expect.any(Function));
     });
   
     it('should log a message when the server starts successfully', () => {
