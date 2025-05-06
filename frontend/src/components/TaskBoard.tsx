@@ -28,6 +28,7 @@ const TaskBoard: React.FC = () => {
       setLoading(true);
       setError(null);
       const data = await Service.getTasks();
+      // eslint-disable-next-line no-console
       console.log('API Response:', data);
       setTasks(data);
     } catch (err) {
