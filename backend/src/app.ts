@@ -18,4 +18,9 @@ app.use('/tasks', taskRoutes);
 // Error handling middleware
 app.use(errorHandler);
 
+// Health check endpoint
+app.get("/healthz", (req, res) => {
+    res.status(200).json({ message: "Backend is running!" });
+});
+
 export default app;

@@ -3,11 +3,13 @@ import express from 'express';
 // Mock dependencies
 jest.mock('express', () => {
   const mockUse = jest.fn();
+  const mockGet = jest.fn(); 
   const mockJson = jest.fn().mockReturnValue('json-middleware');
   
   // Create a mock express instance
   const mockExpress = () => ({
     use: mockUse,
+    get: mockGet,
   });
   
   // Add static methods to the function
@@ -58,5 +60,10 @@ describe('Express App Configuration', () => {
   it('should register error handling middleware', () => {
     const mockApp = mockExpress();
     expect(mockApp.use).toHaveBeenCalledWith('error-handler-mock');
+  });
+
+  it('should register health check endpoint', () => {
+    const mockApp = mockExpress();
+    expect(mockApp.get).toHaveBeenCalledWith('/healthz', expect.any(Function));
   });
 });
