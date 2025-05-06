@@ -1,8 +1,6 @@
 import app from './app';
 import dotenv from 'dotenv';
 import logger from './utils/logger';
-import { initDatabase } from './database/dbConfig';
-import './database';
 
 // Load environment variables
 dotenv.config();
@@ -15,10 +13,6 @@ const PORT = process.env.PORT || 4000;
  */
 const startSrv = async () => {
     try {
-        // Initialize database
-        await initDatabase();
-        logger.info('Database initialization completed');
-
         // Start the server
         app.listen(PORT, () => {    
             logger.info(`Server is running on port ${PORT}`);

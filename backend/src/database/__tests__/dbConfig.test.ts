@@ -1,21 +1,17 @@
+import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 import logger from '../../utils/logger';
-import { Sequelize } from 'sequelize';
 
-interface DbConfig {
-  default: Sequelize;
-  initDatabase: () => Promise<void>;
-}
-
-const mockSequelizeInstance = {
-  authenticate: jest.fn().mockResolvedValue(undefined),
-  sync: jest.fn().mockResolvedValue(undefined),
-  models: { task: {} }
-};
-
-jest.mock('sequelize', () => ({
-  Sequelize: jest.fn(() => mockSequelizeInstance)
-}));
+jest.mock('sequelize', () => {
+  const mockSequelizeInstance = {
+    authenticate: jest.fn().mockResolvedValue(undefined),
+    sync: jest.fn().mockResolvedValue(undefined)
+  };
+  
+  return {
+    Sequelize: jest.fn(() => mockSequelizeInstance)
+  };
+});
 
 jest.mock('dotenv', () => ({
   config: jest.fn()
@@ -28,6 +24,7 @@ jest.mock('../../utils/logger', () => ({
 
 describe('Database Configuration', () => {
   const originalEnv = process.env;
+  const originalExit = process.exit;
   
   beforeEach(() => {
     jest.clearAllMocks();
@@ -41,10 +38,13 @@ describe('Database Configuration', () => {
       DB_DIALECT: 'postgres',
       DB_PORT: '5432'
     };
+    
+    process.exit = jest.fn() as any;
   });
   
   afterAll(() => {
     process.env = originalEnv;
+    process.exit = originalExit;
   });
   
   it('should load environment variables using dotenv', () => {
@@ -60,7 +60,14 @@ describe('Database Configuration', () => {
       require('../../database/dbConfig');
     });
     
-    expect(mockSequelizeInstance).toBeDefined();
+    expect(Sequelize).toHaveBeenCalledWith({
+      database: 'test_db',
+      username: 'test_user',
+      password: 'test_password',
+      host: 'localhost',
+      dialect: 'postgres',
+      port: 5432
+    });
   });
   
   it('should use default port if DB_PORT is not provided', () => {
@@ -70,44 +77,49 @@ describe('Database Configuration', () => {
       require('../../database/dbConfig');
     });
     
+    expect(Sequelize).toHaveBeenCalledWith(
+      expect.objectContaining({
+        port: 5432
+      })
+    );
   });
   
-  it('should authenticate and sync the database when initDatabase is called', async () => {
-    let dbConfig: DbConfig | undefined;
+  it('should try to authenticate and sync the database', async () => {
+    await new Promise(resolve => setTimeout(resolve, 100));
     
     jest.isolateModules(() => {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      dbConfig = require('../../database/dbConfig') as DbConfig;
+      require('../../database/dbConfig');
     });
     
-    if (dbConfig) {
-      await dbConfig.initDatabase();
-      
-      expect(mockSequelizeInstance.authenticate).toHaveBeenCalled();
-      expect(mockSequelizeInstance.sync).toHaveBeenCalledWith({ force: false });
-      expect(logger.info).toHaveBeenCalledWith('Connection to the database has been established successfully.');
-      expect(logger.info).toHaveBeenCalledWith('Database synchronized successfully.');
-    } else {
-      fail('dbConfig module was not loaded correctly');
-    }
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    const sequelizeInstance = ((Sequelize as unknown) as jest.Mock).mock.results[0].value;
+    
+    expect(sequelizeInstance.authenticate).toHaveBeenCalled();
+    expect(sequelizeInstance.sync).toHaveBeenCalledWith({ force: false });
+    expect(logger.info).toHaveBeenCalledWith('Connection to the database has been established successfully.');
+    expect(logger.info).toHaveBeenCalledWith('Database synchronized successfully.');
   });
   
-  it('should throw error if database connection fails', async () => {
+  it('should log error and exit if database connection fails', async () => {
     const mockError = new Error('Connection failed');
-    mockSequelizeInstance.authenticate.mockRejectedValueOnce(mockError);
+    const mockSequelizeInstance = {
+      authenticate: jest.fn().mockRejectedValue(mockError),
+      sync: jest.fn()
+    };
+    (Sequelize as unknown as jest.Mock).mockImplementationOnce(() => mockSequelizeInstance);
     
-    let dbConfig: DbConfig | undefined;
     jest.isolateModules(() => {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      dbConfig = require('../../database/dbConfig') as DbConfig;
+      require('../../database/dbConfig');
     });
     
-    if (dbConfig) {
-      await expect(dbConfig.initDatabase()).rejects.toThrow(mockError);
-      expect(logger.error).toHaveBeenCalledWith('Unable to connect to the database:', mockError);
-      expect(mockSequelizeInstance.sync).not.toHaveBeenCalled();
-    } else {
-      fail('dbConfig module was not loaded correctly');
-    }
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    expect(logger.error).toHaveBeenCalledWith(
+      'Unable to connect to the database:',
+      mockError
+    );
+    expect(process.exit).toHaveBeenCalledWith(1);
+    expect(mockSequelizeInstance.sync).not.toHaveBeenCalled();
   });
 });
