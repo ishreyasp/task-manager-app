@@ -48,33 +48,58 @@ Task Manager Application built to manage and track day to day tasks with ease.
    DB_NAME=task-manager-db
    ```
 
-7. Build the app code:
+6. Build the app code:
    ```bash
    npm run build
    ```
 
-8. To run ESLint for backend and frontend:
+7. To run ESLint for backend and frontend:
    ```bash
    npm run lint
    ```
 
-9. To run test for backend:
+8. To run test for backend:
     ```bash
     cd backend
     npm run test
     ```
 
-10. To run test for backend with coverage report:
+9. To run test for backend with coverage report:
     ```bash
     cd backend
     npm run test:coverage
     ```
              
-11. Start backend and frontend server with live reload:
-   ```bash
-   npm run dev
-   ```   
+10. Start backend and frontend server with live reload:
+    ```bash
+    npm run dev
+    ```   
 
+## Frontend is deployed at: https://task-manager-fuk6kzhlc-shreyas-purkars-projects.vercel.app
+
+## To deploy backend on EC2 follow the below steps:
+1. Go to terraform directory
+   ```bash
+   cd terraform
+   ```
+
+2. Run terraform init
+   ```bash
+   terraform init
+   ```
+   
+3. Provision infrastructure
+   ```bash
+   terraform apply -var-file=dev.tfvars
+   ```
+
+4. Add EC2 IP address in Github Secrets and ALB DNS in Vercel environment (REACT_APP_API_BASE_URL)  
+
+5. To destroy infrastructure 
+   ```bash
+   terraform destroy -var-file-dev.tfvars
+   ```
+   
 ## API Documentation   
 Visit https://github.com/ishreyasp/task-manager-app/tree/main/backend#api-documentation for more information
 
