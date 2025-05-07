@@ -77,10 +77,6 @@ resource "aws_instance" "backend" {
     # Ensure app user has appropriate permissions
     sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE \"${var.db_name}\" TO ${var.db_username};"
 
-    # Create app user and group
-    sudo groupadd taskmanagerapp || echo "Group already exists"
-    sudo useradd --no-create-home --shell /usr/sbin/nologin --gid taskmanagerapp taskmanagerapp || echo "User already exists"
-
     # Create app directory
     sudo mkdir -p /opt/task-manager-app/backend
 
@@ -95,10 +91,8 @@ resource "aws_instance" "backend" {
     PORT=4000
     ENVEOF
 
-    # Set proper permissions
-    sudo chown -R taskmanagerapp:taskmanagerapp /opt/task-manager-app
-    sudo chmod -R 750 /opt/task-manager-app
-    sudo chmod 600 /opt/task-manager-app/backend/.env
+    sudo pm2 startup systemd
+    sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u ubuntu --hp /home/ubuntu
     
     # Log completion for debugging
     echo "User data script completed successfully"

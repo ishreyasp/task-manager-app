@@ -12,12 +12,12 @@ resource "aws_security_group" "app_sg" {
     cidr_blocks = var.ssh_port_cidr
   }
 
-  # Application port 8080
+  # Application port
   ingress {
     from_port       = var.app_port
     to_port         = var.app_port
     protocol        = "tcp"
-    security_groups = [aws_security_group.lb_sg.id]
+    cidr_blocks     = var.app_port_cidr
   }
 
   # Egress rule
