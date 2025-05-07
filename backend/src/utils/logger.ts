@@ -2,7 +2,7 @@ import * as winston from 'winston';
 const { format, transports } = winston;
 
 /**
- * Logger configuration using Winston.
+ * Logger configuration using Winston
  */
 const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info', 

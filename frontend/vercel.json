@@ -2,15 +2,15 @@
   "rewrites": [
     {
       "source": "/api/tasks",
-      "destination": "https://task-manager-alb-1898329522.us-east-2.elb.amazonaws.com/tasks"
+      "destination": "https://task-manager-alb-1723481609.us-east-2.elb.amazonaws.com/tasks"
     },
     {
       "source": "/api/tasks/:id",
-      "destination": "https://task-manager-alb-1898329522.us-east-2.elb.amazonaws.com/tasks/:id"
+      "destination": "https://task-manager-alb-1723481609.us-east-2.elb.amazonaws.com/tasks/:id"
     },
     {
       "source": "/api/healthz",
-      "destination": "https://task-manager-alb-1898329522.us-east-2.elb.amazonaws.com/healthz"
+      "destination": "https://task-manager-alb-1723481609.us-east-2.elb.amazonaws.com/healthz"
     }
   ]
 }
