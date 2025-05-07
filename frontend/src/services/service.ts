@@ -6,7 +6,7 @@ import { TaskUpdate } from '../models/taskUpdate';
 /**
  * Base URL for API requests
  */
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+const API_BASE_URL = "/api";
 
 /**
  * Custom error interface to expose backend error messages
