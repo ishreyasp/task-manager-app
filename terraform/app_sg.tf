@@ -17,7 +17,7 @@ resource "aws_security_group" "app_sg" {
     from_port       = var.app_port
     to_port         = var.app_port
     protocol        = "tcp"
-    cidr_blocks     = var.app_port_cidr
+    security_groups = [aws_security_group.lb_sg.id]
   }
 
   # Egress rule
