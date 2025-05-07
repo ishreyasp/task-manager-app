@@ -60,14 +60,9 @@ variable "ssh_port_cidr" {
   description = "CIDR blocks for SSH access"
 }
 
-variable "http_port_cidr" {
+variable "app_port_cidr" {
   type        = list(string)
   description = "CIDR blocks for HTTP access"
-}
-
-variable "https_port_cidr" {
-  type        = list(string)
-  description = "CIDR blocks for HTTPS access"
 }
 
 variable "egress_cidr" {

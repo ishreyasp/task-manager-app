@@ -2,15 +2,15 @@
     "rewrites": [
       {
         "source": "/api/tasks",
-        "destination": "https://task-manager-alb-194172058.us-east-2.elb.amazonaws.com/tasks"
+        "destination": "http://3.144.113.199:4000/tasks"
       },
       {
         "source": "/api/tasks/:id",
-        "destination": "https://task-manager-alb-194172058.us-east-2.elb.amazonaws.com/tasks/:id"
+        "destination": "http://3.144.113.199:4000/tasks/:id"
       },
       {
         "source": "/api/healthz",
-        "destination": "https://task-manager-alb-194172058.us-east-2.elb.amazonaws.com/healthz"
+        "destination": "http://3.144.113.199:4000/healthz"
       }
     ]
   }
