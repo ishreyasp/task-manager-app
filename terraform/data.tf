@@ -18,3 +18,8 @@ output "database_connection_string" {
   description = "The PostgreSQL connection string (from within EC2)"
   sensitive   = true
 }
+
+output "alb_dns_name" {
+  value       = "https://${aws_lb.alb.dns_name}"
+  description = "The DNS name of the load balancer to use in Vercel environment variables"
+}
