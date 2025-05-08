@@ -111,3 +111,37 @@ Visit https://github.com/ishreyasp/task-manager-app/tree/main/screenshots to see
 - Backend Restful APIs
 - UI/UX
 - Regression Tests
+
+## Notes
+### PM2 Process Manager
+PM2 is utilized in this project to ensure backend application runs reliably in production. It provides:
+- Continuous Operation: Automatically restarts the application if it crashes
+- Startup Management: Ensures the application launches automatically when the server reboots
+- Process Monitoring: Tracks application health, memory usage, and CPU consumption
+- Log Management: Centralizes application logs for easier troubleshooting
+
+The deployment workflow in this project automatically configures PM2 to manage the backend service, providing a resilient production environment with minimal downtime. 
+
+Check out the [PM2 Documentation][pm2-docs] for more details.
+
+[pm2-docs]: https://pm2.keymetrics.io/docs/usage/quick-start/
+
+### Vercel Rewrites
+This project utilizes Vercel's rewrites functionality to seamlessly connect the frontend and backend services. This is configured through a vercel.json file that contains rewrite rules.
+```json
+{
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://[ALB-URL]/$1"
+    }
+  ]
+}
+```
+These rewrites provide:
+- API Proxying: Redirects API requests from the frontend to our AWS-hosted backend
+- CORS Avoidance: Eliminates cross-origin issues by having requests appear from the same domain
+- Certificate Handling: Manages HTTPS certificate validation between services
+- Simplified Frontend Code: Allows the frontend to use relative API paths instead of absolute URLs
+
+This approach creates a seamless integration between our Vercel-hosted frontend and AWS-hosted backend services, improving both security and developer experience.
