@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "https://task-manager-alb-1723481609.us-east-2.elb.amazonaws.com/$1"
+      "destination": "https://task-manager-alb-492409243.us-east-2.elb.amazonaws.com/$1"
     }
   ]
 }
